@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Загрузка
+{% endblock %}
+
+{% block content %}
+    <h1>upload</h1>
+    <form action="" method="post">
+    {% csrf_token %}
+        {{ form.url }}
+        <button type="submit">Upload</button>
+        <span>{{ error }}</span>
+    </form>
+{% endblock %}
