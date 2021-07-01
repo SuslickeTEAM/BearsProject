@@ -1,7 +1,7 @@
-import datetime
-from django.shortcuts import render
+import os
+from django.shortcuts import render, redirect
 from django.views.generic import View
-from .forms import ImagesForm
+from django.views.generic.edit import FormView
 from .models import Images
 import urllib
 from django.core.files.storage import FileSystemStorage
@@ -15,45 +15,42 @@ class BaseView(View):
         return render(request, 'base.html')
 
 
-def links(request):
+# Скачивание по ссылке
+# def links(request):
+#     if request.method == 'POST':
+#         form = ImagesForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('view')
+#         else:
+#             error = 'Форма неверная'
+#     form = ImagesForm()
+#     data = {
+#         'form': form
+#     }
+#     return render(request, 'upload.html', data)
+
+def upload(request):
     if request.method == 'POST':
-        form = ImagesForm(request.POST)
-        if form.is_valid():
-            form.save()
-            print('ALL GOOD')
+        uploaded_file = request.FILES['document']
+        fs = FileSystemStorage()
+        while not uploaded_file.name[-4:] in ['.zip']:
+            uploaded_file = request.FILES['document']
+            raise TypeError('Это не .zip архив')
         else:
-            error = 'Форма неверная'
-    form = ImagesForm()
-    data = {
-        'form': form
-    }
-
-    return render(request, 'upload.html', data)
-
-
-def download(request):
-    url = Images.objects.all()
-    some_url = url[0]
-    address = some_url.url
-    print(address)
-    r = requests.get(address)
-
-    # with open("C:\Media\medias1.zip", "wb") as code:
-    #     code.write(r.content)
-
-    urllib.request.urlretrieve(address, "C:\Media\medias.zip")
-    url = Images.objects.all().delete()
-
-    link = {
-        'urls': url
-    }
-    edit(request)
-    return render(request, 'unloading.html', link)
+            fs.save(uploaded_file.name, uploaded_file)
+            edit(request)
+    return render(request, 'upload.html', )
 
 
 def edit(request):
-    with zipfile.ZipFile('C:\Media\medias.zip', 'r') as my_zip:
-        print(my_zip.namelist())
-        my_zip.extractall('C:\Medias')
-        # Для нейронки
-
+    try:
+        user = 'Users'
+        file = os.listdir(path=f'C:/{user}/Suslicke/PycharmProjects/webbear/media')
+        print(file[1])
+        with zipfile.ZipFile(f'C:/{user}/Suslicke/PycharmProjects/webbear/media/{file[1]}', 'r') as my_zip:
+            print(my_zip.namelist())
+            my_zip.extractall(f'C:/{user}/Suslicke/PycharmProjects/webbear/media/edit')
+        os.remove(f'C:/{user}/Suslicke/PycharmProjects/webbear/media/{file[1]}')
+    except FileNotFoundError:
+        print('All good')
