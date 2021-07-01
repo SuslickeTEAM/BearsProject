@@ -6,10 +6,13 @@
 
 {% block content %}
     <h1>upload</h1>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
         {{ form.url }}
+        <input type="file" name="document">
         <button type="submit">Upload</button>
-        <span>{{ error }}</span>
+    {% if error %}
+        {{ error }}
+    {% endif %}
     </form>
 {% endblock %}
