@@ -1,16 +1,26 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}
 Загрузка
 {% endblock %}
 
+{#{% block head %} <link rel="stylesheet" href="css/style.css"> {% endblock %}#}
+
 {% block content %}
-    <h1>upload</h1>
     <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
         {{ form.url }}
-        <input type="file" name="document">
-        <button type="submit">Upload</button>
+        <div class="content">
+            <p class="header">Отыщите медведя на фото</p>
+            <img src="{% static "main/img/Find_a_bear_image.jpg" %}" alt="Белый медведь">
+            <p><em>Для того, чтобы его найти, нужно <strong>загрузить zip-файл</strong></em></p>
+            <input name="document" type="file">
+            <br>
+            <button class="button1" type="reset">Очистить</button>
+            <button class="button2" type="submit">Загрузить</button>
+        </div>
     {% if error %}
         {{ error }}
     {% endif %}

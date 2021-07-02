@@ -39,18 +39,22 @@ def upload(request):
             raise TypeError('Это не .zip архив')
         else:
             fs.save(uploaded_file.name, uploaded_file)
-            edit(request)
-    return render(request, 'upload.html', )
+            unzip(request)
+            return redirect('view')
+    return render(request, 'upload.html')
 
 
-def edit(request):
+def unzip(request):
     try:
         user = 'Users'
         file = os.listdir(path=f'C:/{user}/Suslicke/PycharmProjects/webbear/media')
-        print(file[1])
         with zipfile.ZipFile(f'C:/{user}/Suslicke/PycharmProjects/webbear/media/{file[1]}', 'r') as my_zip:
-            print(my_zip.namelist())
             my_zip.extractall(f'C:/{user}/Suslicke/PycharmProjects/webbear/media/edit')
         os.remove(f'C:/{user}/Suslicke/PycharmProjects/webbear/media/{file[1]}')
     except FileNotFoundError:
         print('All good')
+
+
+def edit(request):
+    # Нейронка
+    return render(request, 'view.html')

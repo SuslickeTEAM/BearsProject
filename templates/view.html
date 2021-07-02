@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Выгрузка
+Найди медведя
 {% endblock %}
 
 {% block content %}
-    <h1>hello</h1>
-    {% for info in urls %}
-        {{ info.url }}
-    {% endfor %}
+    <div class="view">
+        {% for info in urls %}
+            {{ info.url }}
+        {% endfor %}
+    </div>
 {% endblock %}
